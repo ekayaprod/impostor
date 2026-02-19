@@ -25,6 +25,7 @@
         gInfos,
         topicsInfoList = TOPICS.data,
         playedTopics = [],
+        allImpostorsModeTriggered = false,
 
         oldTopicsInfoList = [
             {
@@ -309,8 +310,12 @@
     }
 
     function addPlayer(opts) {
-        var n = opts.name || ("Player" + (numPlayers() + 1)),
-            cloned = $('#playerLiToClone').clone(),
+        var n = opts.name || ("Player" + (numPlayers() + 1));
+        if (typeof n !== 'string' || n.trim().length === 0) {
+            n = "Player" + (numPlayers() + 1);
+        }
+
+        var cloned = $('#playerLiToClone').clone(),
             inp;
 
         cloned.removeAttr("id");
@@ -335,12 +340,20 @@
         var playerNamesStr = localStorage.getItem("playerNames"),
             playerNames;
         if (playerNamesStr) {
-            //TODO: playerNames may not have been in storeage
-            playerNames = JSON.parse(playerNamesStr);
-            return playerNames;
-        } else {
-            return [];
+            try {
+                playerNames = JSON.parse(playerNamesStr);
+                if (Array.isArray(playerNames)) {
+                    // Filter out non-string names or empty strings
+                    playerNames = playerNames.filter(function(name) {
+                        return typeof name === 'string' && name.trim().length > 0;
+                    });
+                    return playerNames;
+                }
+            } catch (e) {
+                console.error("Error parsing player names from storage:", e);
+            }
         }
+        return [];
     }
 
     function getCurrentPlayerNames() {
@@ -369,6 +382,17 @@
     }
 
     function setRandomTopic() {
+        // "Oops! All Impostors" chance
+        // 1/500 chance, never twice in one session.
+        if (!allImpostorsModeTriggered && Math.random() < (1 / 500)) {
+            allImpostorsModeTriggered = true;
+            setTopicInfo({
+                topic: "All Impostors",
+                category: "Special Event"
+            });
+            return;
+        }
+
         var availableTopics = _.filter(topicsInfoList, function (topic) {
             return !_.contains(playedTopics, topic);
         });
