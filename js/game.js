@@ -24,6 +24,8 @@
     var currentTopicInfo,
         gInfos,
         topicsInfoList = TOPICS.data,
+        playedTopics = [],
+        allImpostorsModeTriggered = false,
 
         oldTopicsInfoList = [
             {
@@ -304,12 +306,16 @@
 
 
     function numPlayers() {
-        return $('#playerList li').size();
+        return $('#playerList li').length;
     }
 
     function addPlayer(opts) {
-        var n = opts.name || ("Player" + (numPlayers() + 1)),
-            cloned = $('#playerLiToClone').clone(),
+        var n = opts.name || ("Player" + (numPlayers() + 1));
+        if (typeof n !== 'string' || n.trim().length === 0) {
+            n = "Player" + (numPlayers() + 1);
+        }
+
+        var cloned = $('#playerLiToClone').clone(),
             inp;
 
         cloned.removeAttr("id");
@@ -334,12 +340,20 @@
         var playerNamesStr = localStorage.getItem("playerNames"),
             playerNames;
         if (playerNamesStr) {
-            //TODO: playerNames may not have been in storeage
-            playerNames = JSON.parse(playerNamesStr);
-            return playerNames;
-        } else {
-            return [];
+            try {
+                playerNames = JSON.parse(playerNamesStr);
+                if (Array.isArray(playerNames)) {
+                    // Filter out non-string names or empty strings
+                    playerNames = playerNames.filter(function(name) {
+                        return typeof name === 'string' && name.trim().length > 0;
+                    });
+                    return playerNames;
+                }
+            } catch (e) {
+                console.error("Error parsing player names from storage:", e);
+            }
         }
+        return [];
     }
 
     function getCurrentPlayerNames() {
@@ -368,8 +382,28 @@
     }
 
     function setRandomTopic() {
-        //TODO: don't pick a topic we've played already in this session.
-        var randomPick = pick(topicsInfoList);
+        // "Oops! All Impostors" chance
+        // 1/500 chance, never twice in one session.
+        if (!allImpostorsModeTriggered && Math.random() < (1 / 500)) {
+            allImpostorsModeTriggered = true;
+            setTopicInfo({
+                topic: "All Impostors",
+                category: "Special Event"
+            });
+            return;
+        }
+
+        var availableTopics = _.filter(topicsInfoList, function (topic) {
+            return !_.contains(playedTopics, topic);
+        });
+
+        if (availableTopics.length === 0) {
+            availableTopics = topicsInfoList;
+            playedTopics = [];
+        }
+
+        var randomPick = pick(availableTopics);
+        playedTopics.push(randomPick);
         setTopicInfo(randomPick);
     }
 
@@ -422,9 +456,16 @@
             });
         });
 
-        impostorInfo = _.sample(gInfos);
-        impostorInfo.topic = "???";
-        impostorInfo.isImpostor = true;
+        if (topic.toLowerCase() === "all impostors") {
+            gInfos.forEach(function (info) {
+                info.topic = "???";
+                info.isImpostor = true;
+            });
+        } else {
+            impostorInfo = _.sample(gInfos);
+            impostorInfo.topic = "???";
+            impostorInfo.isImpostor = true;
+        }
 
         playerNames.forEach(function (n, i) {
             var info = gInfos[i],
@@ -444,10 +485,13 @@
     }
 
     function revealImpostor() {
-        var impostorInfo = gInfos.find(function (info) {
+        var impostorNames = gInfos.filter(function (info) {
             return info.isImpostor;
-        });
-        $('#revealModal .impostorName').html(impostorInfo.playerName);
+        }).map(function (info) {
+            return info.playerName;
+        }).join(", ");
+
+        $('#revealModal .impostorName').html(impostorNames);
         $('#revealModal .topic').html(currentTopicInfo.topic);
 
     }
@@ -467,7 +511,7 @@
         $('#showRoleModal .categoryDisplay').html(info.category);
 
         obj.closest("li").remove();
-        var remainingPlayerCount = $('#playerListForShowTopic li').size();
+        var remainingPlayerCount = $('#playerListForShowTopic li').length;
         if (remainingPlayerCount < 1) {
             $('#startButton').show();
         }
