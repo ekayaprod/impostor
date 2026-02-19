@@ -432,9 +432,16 @@
             });
         });
 
-        impostorInfo = _.sample(gInfos);
-        impostorInfo.topic = "???";
-        impostorInfo.isImpostor = true;
+        if (topic.toLowerCase() === "all impostors") {
+            gInfos.forEach(function (info) {
+                info.topic = "???";
+                info.isImpostor = true;
+            });
+        } else {
+            impostorInfo = _.sample(gInfos);
+            impostorInfo.topic = "???";
+            impostorInfo.isImpostor = true;
+        }
 
         playerNames.forEach(function (n, i) {
             var info = gInfos[i],
@@ -454,10 +461,13 @@
     }
 
     function revealImpostor() {
-        var impostorInfo = gInfos.find(function (info) {
+        var impostorNames = gInfos.filter(function (info) {
             return info.isImpostor;
-        });
-        $('#revealModal .impostorName').html(impostorInfo.playerName);
+        }).map(function (info) {
+            return info.playerName;
+        }).join(", ");
+
+        $('#revealModal .impostorName').html(impostorNames);
         $('#revealModal .topic').html(currentTopicInfo.topic);
 
     }
