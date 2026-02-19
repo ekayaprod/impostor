@@ -24,6 +24,7 @@
     var currentTopicInfo,
         gInfos,
         topicsInfoList = TOPICS.data,
+        playedTopics = [],
 
         oldTopicsInfoList = [
             {
@@ -304,7 +305,7 @@
 
 
     function numPlayers() {
-        return $('#playerList li').size();
+        return $('#playerList li').length;
     }
 
     function addPlayer(opts) {
@@ -368,8 +369,17 @@
     }
 
     function setRandomTopic() {
-        //TODO: don't pick a topic we've played already in this session.
-        var randomPick = pick(topicsInfoList);
+        var availableTopics = _.filter(topicsInfoList, function (topic) {
+            return !_.contains(playedTopics, topic);
+        });
+
+        if (availableTopics.length === 0) {
+            availableTopics = topicsInfoList;
+            playedTopics = [];
+        }
+
+        var randomPick = pick(availableTopics);
+        playedTopics.push(randomPick);
         setTopicInfo(randomPick);
     }
 
@@ -467,7 +477,7 @@
         $('#showRoleModal .categoryDisplay').html(info.category);
 
         obj.closest("li").remove();
-        var remainingPlayerCount = $('#playerListForShowTopic li').size();
+        var remainingPlayerCount = $('#playerListForShowTopic li').length;
         if (remainingPlayerCount < 1) {
             $('#startButton').show();
         }
