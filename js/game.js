@@ -240,18 +240,18 @@
 
         currentTopicInfo = null;
 
-        $('#addPlayerButton').bind('click', addPlayer);
+        $('#addPlayerButton').on('click', addPlayer);
 
-        $('#setTopicButton').bind('click', function () {
+        $('#setTopicButton').on('click', function () {
             //clear the dialog
             $('#topicInputModal #topicInput').val("");
             $('#topicInputModal #categoryInput').val("");
         });
-        $('#randomTopicButton').bind('click', function () {
+        $('#randomTopicButton').on('click', function () {
             setRandomTopic();
         });
 
-        $('#saveAndExitTopicInputModalButton').bind('click', function () {
+        $('#saveAndExitTopicInputModalButton').on('click', function () {
             var info = {
                 topic: $('#topicInputModal #topicInput').val(),
                 category: $('#topicInputModal #categoryInput').val()
@@ -265,13 +265,13 @@
         });
 
 
-        $('#editGameButton').bind('click', editGame);
-        $('#distributeTopicButton').bind('click', buildScreen2);
-        $('#endAndRevealButton').bind('click', revealImpostor);
-        $('#exitRevealModalButton').bind('click', function () {
+        $('#editGameButton').on('click', editGame);
+        $('#distributeTopicButton').on('click', buildScreen2);
+        $('#endAndRevealButton').on('click', revealImpostor);
+        $('#exitRevealModalButton').on('click', function () {
             buildScreen1();
         });
-        $('#startButton').bind('click', buildScreen3);
+        $('#startButton').on('click', buildScreen3);
 
         buildScreen1();
     });
@@ -473,7 +473,7 @@
                 inp = $("<a class='button large hollow expanded' data-open='showRoleModal'>" + labelText + "</a>"),
                 li = $("<li>");
             inp.appendTo(li);
-            inp.bind('click', function () {
+            inp.on('click', function () {
                 showForPlayer($(this), info);
             });
             li.appendTo('#playerListForShowTopic');
