@@ -1,0 +1,16 @@
+127.0.0.1 - - [23/Feb/2026 21:40:29] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [23/Feb/2026 21:40:29] "GET /css/foundation.min.css HTTP/1.1" 200 -
+127.0.0.1 - - [23/Feb/2026 21:40:29] "GET /js/jquery.min.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Feb/2026 21:40:29] "GET /js/what-input.min.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Feb/2026 21:40:29] "GET /js/underscore-min.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Feb/2026 21:40:29] "GET /js/game.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Feb/2026 21:40:29] "GET /js/topics.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Feb/2026 21:40:29] "GET /js/foundation.min.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Feb/2026 21:40:47] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [23/Feb/2026 21:40:48] "GET /css/foundation.min.css HTTP/1.1" 200 -
+127.0.0.1 - - [23/Feb/2026 21:40:48] "GET /js/jquery.min.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Feb/2026 21:40:48] "GET /js/foundation.min.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Feb/2026 21:40:48] "GET /js/topics.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Feb/2026 21:40:48] "GET /js/what-input.min.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Feb/2026 21:40:48] "GET /js/underscore-min.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Feb/2026 21:40:48] "GET /js/game.js HTTP/1.1" 200 -

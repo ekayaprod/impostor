@@ -292,7 +292,7 @@
     }
 
     function updateCategoryDisplay() {
-        $('#categoryDisplay').html(currentTopicInfo ? currentTopicInfo.category : "no category set");
+        $('#categoryDisplay').html(currentTopicInfo ? currentTopicInfo.category : "No category selected");
     }
 
     function toggleMenu() {
@@ -501,7 +501,7 @@
         //TODO: Ensure dialog is cleared before and after being displayed,
         //      so that no lazy rendering gives info away where it should not.
         if (info.isImpostor) {
-            $('#showRoleModal .topicDisplay').html("You're the impostor!");
+            $('#showRoleModal .topicDisplay').html("You are the Impostor.");
             $('#showRoleModal .topicDisplayLabel').hide();
         } else {
             $('#showRoleModal .topicDisplay').html(info.topic);

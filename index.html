@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Modern Art Impostor - Game Aid</title>
+  <title>Modern Art Impostor - Game Assistant</title>
   <link rel="stylesheet" type="text/css" href="css/foundation.min.css" />
   <script type="text/javascript" src="js/jquery.min.js"></script>
   <script type="text/javascript" src="js/what-input.min.js"></script>
@@ -16,7 +16,7 @@
 </head>
 <body>
   <div class="row">
-    <div class="large-12 columns"><h1 align='center'>Impostor - Game Aid</h1></div>
+    <div class="large-12 columns"><h1 align='center'>Impostor Game Assistant</h1></div>
   </div>
   <div id='screenSetPlayers' class='screen row'>
     
@@ -27,19 +27,19 @@
         </ol>
       </div>
       <div id='playerListControls' class='row'>
-        <a id="addPlayerButton" class="button small-6">Add player</a>
+        <a id="addPlayerButton" class="button small-6">Add New Player</a>
       </div>
       <div id='gameControls'>
         <div class='row'>
           <div class='button-group expanded'>
-            <a id="randomTopicButton" class="button">Random Topic</a>
-            <a id="setTopicButton" class="button" data-open="topicInputModal">Set Topic</a>
+            <a id="randomTopicButton" class="button">Pick Random Topic</a>
+            <a id="setTopicButton" class="button" data-open="topicInputModal">Set Custom Topic</a>
           </div>
         </div>
 
-        <label>Category: <span id="categoryDisplay">no category chosen...</span></label>
+        <label>Category: <span id="categoryDisplay">Waiting for category selection...</span></label>
         <div class="row">          
-          <a id="distributeTopicButton" class="button success expanded">Next</a>
+          <a id="distributeTopicButton" class="button success expanded">Distribute Roles</a>
         </div>  
 
       </div>
@@ -51,9 +51,9 @@
 <div id='screenDistributeTopic' class='screen row'>
   <div class="large-4 columns"><h3></h3></div>
   <div class="large-4 columns">
-    <a id="editGameButton" class="button large expanded">Edit Game...</a>
+    <a id="editGameButton" class="button large expanded">Modify Game Settings</a>
     <ul id='playerListForShowTopic'class="no-bullet"></ul>
-    <a id="startButton" class="button large success expanded">Start</a>
+    <a id="startButton" class="button large success expanded">Begin Round</a>
   </div>
 
   <div class="large-4 columns"><h3></h3></div>
@@ -66,7 +66,7 @@
 
     <h2>Game Has Started</h2>
     <ul id='playerListForGameInProgress'></ul>
-    <a id='endAndRevealButton' data-open='revealModal' class='button large expanded'>End (Reveal All!)</a>
+    <a id='endAndRevealButton' data-open='revealModal' class='button large expanded'>End Game & Reveal Impostor</a>
   </div>
   <div class="large-4 columns"><h3></h3></div>
 </div>
@@ -85,8 +85,8 @@
     <span class='categoryDisplay'></span>
     <span class='impostorDisplay'></span>
   </div>
-  <button class="button large expanded" data-close aria-label="Close modal" type="button">
-    <span aria-hidden="true">Okay!</span>
+  <button class="button large expanded" data-close aria-label="Close role reveal modal" type="button">
+    <span aria-hidden="true">Got it</span>
   </button>
   <button class="close-button" data-close aria-label="Close modal" type="button">
     <span aria-hidden="true">&times;</span>
@@ -95,11 +95,11 @@
 </div>
 
 <div id='revealModal' class="reveal" data-reveal>
-<strong class='impostorName'></strong> was the impostor!<br/>
+<strong class='impostorName'></strong> was the Impostor!<br/>
 <label>The topic was "<strong class='topic'></strong>"</label>
 <h3></h3>
 <button id="exitRevealModalButton" class="button expanded success" data-close aria-label="Close modal" type="button">
-  <span aria-hidden="true">OK!  New Game!</span>
+  <span aria-hidden="true">Start New Game</span>
 </button>
 <button class="close-button" data-close aria-label="Close modal" type="button">
   <span aria-hidden="true">&times;</span>
@@ -107,12 +107,12 @@
 </div>
 
 <div id='topicInputModal' class="reveal" data-reveal>
-  <h3>Please enter topic and a category</h3>
+  <h3>Set a Secret Topic</h3>
   <label>Topic: 
-    <input id='topicInput' type='text' placeholder='Topic to guess'/>
+    <input id='topicInput' type='text' placeholder='Enter the secret topic'/>
   </label>
   <label>Category: 
-    <input id='categoryInput' type='text' placeholder='category (a clue)'/>
+    <input id='categoryInput' type='text' placeholder='Enter a category hint'/>
   </label>
   <a id="saveAndExitTopicInputModalButton" class="button large success expanded" data-close>Save</a>
   <a id="exitTopicInputModalButton" class="button large expanded alert" data-close>Cancel</a>  
@@ -132,7 +132,7 @@
     </div>
     <div class='small-3 large-3 columns'>
       <button type='button' class='button deletePlayer alert expanded' 
-              onclick='deletePlayer(this);'>del</button>
+              onclick='deletePlayer(this);' aria-label="Delete Player">Delete</button>
     </div>
   </div>
 </li>
