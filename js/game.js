@@ -240,7 +240,9 @@
 
         currentTopicInfo = null;
 
-        $('#addPlayerButton').on('click', addPlayer);
+        $('#addPlayerButton').on('click', function() {
+            addPlayer({ focus: true, animate: true });
+        });
 
         $('#setTopicButton').on('click', function () {
             //clear the dialog
@@ -310,6 +312,7 @@
     }
 
     function addPlayer(opts) {
+        opts = opts || {}; // Ensure opts is defined
         var n = opts.name || ("Player" + (numPlayers() + 1));
         if (typeof n !== 'string' || n.trim().length === 0) {
             n = "Player" + (numPlayers() + 1);
@@ -321,9 +324,20 @@
         cloned.removeAttr("id");
         cloned.removeAttr("style");
         cloned.addClass('playerListItem');
+
+        if (opts.animate) {
+            cloned.addClass('player-enter');
+        }
+
         cloned.appendTo('#playerList');
         inp = cloned.find(".playerNameInput");
         inp.attr("value", n);
+
+        if (opts.focus) {
+            inp.focus();
+            inp.select();
+        }
+
         storePlayerList();
     }
 
@@ -332,8 +346,14 @@
     }
 
     function deletePlayer(obj) {
-        $(obj).closest(".playerListItem").remove();
-        storePlayerList();
+        var li = $(obj).closest(".playerListItem");
+        li.addClass('player-leave');
+
+        // Remove after animation
+        setTimeout(function() {
+            li.remove();
+            storePlayerList();
+        }, 300);
     }
 
     function restorePlayersFromStoreage() {
