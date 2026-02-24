@@ -14,9 +14,10 @@ $(document).ready(function () {
     });
 
     $('#setTopicButton').on('click', function () {
-        //clear the dialog
-        $('#topicInputModal #topicInput').val("");
-        $('#topicInputModal #categoryInput').val("");
+        //clear the dialog and error state
+        $('#topicInputModal #topicInput').val("").removeClass('is-invalid-input');
+        $('#topicInputModal #categoryInput').val("").removeClass('is-invalid-input');
+        $('#topicErrorMsg').hide();
     });
 
     $('#randomTopicButton').on('click', function () {
@@ -26,17 +27,46 @@ $(document).ready(function () {
     });
 
     $('#saveAndExitTopicInputModalButton').on('click', function () {
+        var $topicInput = $('#topicInputModal #topicInput');
+        var $categoryInput = $('#topicInputModal #categoryInput');
+        var $errorMsg = $('#topicErrorMsg');
+
         var info = {
-            topic: $('#topicInputModal #topicInput').val(),
-            category: $('#topicInputModal #categoryInput').val()
+            topic: $topicInput.val(),
+            category: $categoryInput.val()
         };
-        //Prevent close if topic+category are not valid
-        if (!info.topic || info.topic.length < 2 || !info.category || info.category.length < 2) {
+
+        // Reset error states
+        $topicInput.removeClass('is-invalid-input');
+        $categoryInput.removeClass('is-invalid-input');
+        $errorMsg.hide();
+
+        var errors = [];
+        if (!info.topic || info.topic.trim().length < 2) {
+            $topicInput.addClass('is-invalid-input');
+            errors.push("topic");
+        }
+        if (!info.category || info.category.trim().length < 2) {
+            $categoryInput.addClass('is-invalid-input');
+            errors.push("category");
+        }
+
+        if (errors.length > 0) {
+            $errorMsg.text("We need a topic and category to start the game. Give us a hint!").slideDown();
             return false;
         } else {
             GameApp.State.currentTopicInfo = info;
             GameApp.UI.updateCategoryDisplay();
+            $('#topicInputModal').foundation('close');
         }
+    });
+
+    // Clear error state on input
+    $('#topicInputModal input').on('input', function() {
+        $(this).removeClass('is-invalid-input');
+        // If both inputs are now valid (or at least being edited), hide the main error message
+        // A simple approach is to hide it as soon as user interacts, assuming they are fixing it.
+        $('#topicErrorMsg').slideUp();
     });
 
     $('#editGameButton').on('click', function() {
