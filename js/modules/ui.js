@@ -136,17 +136,20 @@ window.GameApp.UI = (function () {
 
         // Distribute roles
         var gInfos = GameApp.Logic.distributeRoles(playerNames, currentTopicInfo);
+        var fragment = document.createDocumentFragment();
 
         gInfos.forEach(function (info, i) {
             var labelText = info.playerName,
                 inp = $("<a class='button large hollow expanded' data-open='showRoleModal'>" + labelText + "</a>"),
-                li = $("<li>");
+                li = $("<li class='role-reveal-item' style='--i: " + i + ";'>");
             inp.appendTo(li);
             inp.on('click', function () {
                 showForPlayer($(this), info);
             });
-            li.appendTo('#playerListForShowTopic');
+            fragment.appendChild(li[0]);
         });
+
+        $('#playerListForShowTopic').append(fragment);
     }
 
     function buildScreen3() {
