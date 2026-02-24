@@ -7,10 +7,25 @@ window.GameApp.UI = (function () {
     function changeScreenTo(screenId) {
         var $currentScreen = $('.screen:visible');
         var $newScreen = $(screenId);
+        var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        function showNewScreen() {
+            $currentScreen.hide().removeClass('fade-out').css('opacity', 0).attr('aria-hidden', 'true');
+            $newScreen.show().addClass('fade-in').attr('aria-hidden', 'false');
+
+            // Force reflow
+            void $newScreen[0].offsetWidth;
+
+            $newScreen.removeClass('fade-in');
+
+            // Manage Focus: Set focus to the new screen container
+            $newScreen.focus();
+        }
 
         if ($currentScreen.length === 0) {
             // First load, just show it
-            $newScreen.show().css('opacity', 1);
+            $newScreen.show().css('opacity', 1).attr('aria-hidden', 'false');
+            // Do not auto-focus on initial load to avoid jumping, user expects to start at top usually
             return;
         }
 
@@ -18,17 +33,23 @@ window.GameApp.UI = (function () {
             return;
         }
 
-        $currentScreen.addClass('fade-out');
+        if (prefersReducedMotion) {
+            showNewScreen();
+        } else {
+            $currentScreen.addClass('fade-out');
 
-        setTimeout(function() {
-            $currentScreen.hide().removeClass('fade-out').css('opacity', 0);
-            $newScreen.show().addClass('fade-in');
+            var transitionEnded = false;
+            var onTransitionEnd = function() {
+                if (transitionEnded) return;
+                transitionEnded = true;
+                showNewScreen();
+            };
 
-            // Force reflow
-            void $newScreen[0].offsetWidth;
+            $currentScreen.one('transitionend', onTransitionEnd);
 
-            $newScreen.removeClass('fade-in');
-        }, 300); // Match CSS transition time
+            // Safety timeout slightly longer than CSS transition (300ms)
+            setTimeout(onTransitionEnd, 350);
+        }
     }
 
     function updateCategoryDisplay() {
