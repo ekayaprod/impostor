@@ -32,27 +32,43 @@ $(document).ready(function () {
         var $errorMsg = $('#topicErrorMsg');
 
         var info = {
-            topic: $topicInput.val(),
-            category: $categoryInput.val()
+            topic: $topicInput.val().trim(),
+            category: $categoryInput.val().trim()
         };
 
         // Reset error states
-        $topicInput.removeClass('is-invalid-input');
-        $categoryInput.removeClass('is-invalid-input');
-        $errorMsg.hide();
+        $topicInput.removeClass('is-invalid-input').removeAttr('aria-invalid');
+        $categoryInput.removeClass('is-invalid-input').removeAttr('aria-invalid');
+        $errorMsg.hide().empty();
 
         var errors = [];
-        if (!info.topic || info.topic.trim().length < 2) {
-            $topicInput.addClass('is-invalid-input');
+        var firstErrorInput = null;
+
+        if (!info.topic || info.topic.length < 2) {
+            $topicInput.addClass('is-invalid-input').attr('aria-invalid', 'true');
             errors.push("topic");
+            if (!firstErrorInput) firstErrorInput = $topicInput;
         }
-        if (!info.category || info.category.trim().length < 2) {
-            $categoryInput.addClass('is-invalid-input');
+        if (!info.category || info.category.length < 2) {
+            $categoryInput.addClass('is-invalid-input').attr('aria-invalid', 'true');
             errors.push("category");
+            if (!firstErrorInput) firstErrorInput = $categoryInput;
         }
 
         if (errors.length > 0) {
-            $errorMsg.text("We need a topic and category to start the game. Give us a hint!").slideDown();
+            var msg = "";
+            if (errors.includes("topic") && errors.includes("category")) {
+                msg = "Please enter both a secret topic and a category hint to start.";
+            } else if (errors.includes("topic")) {
+                msg = "The game needs a secret topic to begin.";
+            } else {
+                msg = "Please add a category hint so players know what to expect.";
+            }
+
+            $errorMsg.text(msg).slideDown();
+            if (firstErrorInput) {
+                firstErrorInput.focus();
+            }
             return false;
         } else {
             GameApp.State.currentTopicInfo = info;
