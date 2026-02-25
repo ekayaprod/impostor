@@ -10,7 +10,7 @@ $(document).ready(function () {
 
     // Event Listeners
     $('#addPlayerButton').on('click', function() {
-        GameApp.UI.addPlayer({ focus: true, animate: true });
+        GameApp.UI.PlayerManager.addPlayer({ focus: true, animate: true });
     });
 
     $('#setTopicButton').on('click', function () {
@@ -22,7 +22,7 @@ $(document).ready(function () {
     $('#randomTopicButton').on('click', function () {
         var topicInfo = GameApp.Logic.setRandomTopic();
         GameApp.State.currentTopicInfo = topicInfo;
-        GameApp.UI.updateCategoryDisplay();
+        GameApp.UI.GameFlow.updateCategoryDisplay();
     });
 
     $('#saveAndExitTopicInputModalButton').on('click', function () {
@@ -35,33 +35,33 @@ $(document).ready(function () {
             return false;
         } else {
             GameApp.State.currentTopicInfo = info;
-            GameApp.UI.updateCategoryDisplay();
+            GameApp.UI.GameFlow.updateCategoryDisplay();
         }
     });
 
     $('#editGameButton').on('click', function() {
-        GameApp.UI.changeScreenTo('#screenSetPlayers');
+        GameApp.UI.ScreenManager.changeScreenTo('#screenSetPlayers');
     });
 
-    $('#distributeTopicButton').on('click', GameApp.UI.buildScreen2);
+    $('#distributeTopicButton').on('click', GameApp.UI.GameFlow.buildScreen2);
 
-    $('#endAndRevealButton').on('click', GameApp.UI.revealImpostor);
+    $('#endAndRevealButton').on('click', GameApp.UI.GameFlow.revealImpostor);
 
     $('#exitRevealModalButton').on('click', function () {
-        GameApp.UI.buildScreen1();
+        GameApp.UI.GameFlow.buildScreen1();
     });
 
-    $('#startButton').on('click', GameApp.UI.buildScreen3);
+    $('#startButton').on('click', GameApp.UI.GameFlow.buildScreen3);
 
     // Event Delegation for dynamic elements
     $(document).on('click', '.deletePlayer', function() {
-        GameApp.UI.deletePlayer(this);
+        GameApp.UI.PlayerManager.deletePlayer(this);
     });
 
     $(document).on('input', '.playerNameInput', function() {
-        GameApp.UI.updatePlayerListInState();
+        GameApp.UI.PlayerManager.updatePlayerListInState();
     });
 
     // Start App
-    GameApp.UI.buildScreen1();
+    GameApp.UI.GameFlow.buildScreen1();
 });

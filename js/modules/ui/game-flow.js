@@ -1,106 +1,31 @@
 /*global $, GameApp */
 window.GameApp = window.GameApp || {};
+window.GameApp.UI = window.GameApp.UI || {};
 
-window.GameApp.UI = (function () {
+window.GameApp.UI.GameFlow = (function () {
     "use strict";
-
-    function changeScreenTo(screenId) {
-        var $currentScreen = $('.screen:visible');
-        var $newScreen = $(screenId);
-
-        if ($currentScreen.length === 0) {
-            // First load, just show it
-            $newScreen.show().css('opacity', 1);
-            return;
-        }
-
-        if ($currentScreen.attr('id') === $newScreen.attr('id')) {
-            return;
-        }
-
-        $currentScreen.addClass('fade-out');
-
-        setTimeout(function() {
-            $currentScreen.hide().removeClass('fade-out').css('opacity', 0);
-            $newScreen.show().addClass('fade-in');
-
-            // Force reflow
-            void $newScreen[0].offsetWidth;
-
-            $newScreen.removeClass('fade-in');
-        }, 300); // Match CSS transition time
-    }
 
     function updateCategoryDisplay() {
         var info = GameApp.State.currentTopicInfo;
         $('#categoryDisplay').html(info ? info.category : "No category selected");
 
-        if (numPlayers() > 2 && info && info.topic && info.category) {
+        // Use PlayerManager to get player count
+        var count = GameApp.UI.PlayerManager ? GameApp.UI.PlayerManager.numPlayers() : 0;
+
+        if (count > 2 && info && info.topic && info.category) {
             $('#distributeTopicButton').show();
         } else {
             $('#distributeTopicButton').hide();
         }
     }
 
-    function numPlayers() {
-        return $('#playerList li').length;
-    }
-
-    function addPlayer(opts) {
-        opts = opts || {};
-        var n = opts.name || ("Player" + (numPlayers() + 1));
-        if (typeof n !== 'string' || n.trim().length === 0) {
-            n = "Player" + (numPlayers() + 1);
-        }
-
-        var cloned = $('#playerLiToClone').clone(),
-            inp;
-
-        cloned.removeAttr("id");
-        cloned.removeAttr("style");
-        cloned.addClass('playerListItem');
-
-        if (opts.animate) {
-            cloned.addClass('player-enter');
-        }
-
-        cloned.appendTo('#playerList');
-        inp = cloned.find(".playerNameInput");
-        inp.val(n);
-
-        if (opts.focus) {
-            inp.focus();
-            inp.select();
-        }
-
-        updatePlayerListInState();
-    }
-
-    function deletePlayer(obj) {
-        var li = $(obj).closest(".playerListItem");
-        li.addClass('player-leave');
-
-        setTimeout(function() {
-            li.remove();
-            updatePlayerListInState();
-        }, 300);
-    }
-
-    function updatePlayerListInState() {
-        var names = $('#playerList .playerNameInput').map(function () {
-            return this.value;
-        }).get();
-        GameApp.State.savePlayers(names);
-        updateCategoryDisplay(); // To check if we have enough players to start
-    }
-
     function buildScreen1() {
-        changeScreenTo('#screenSetPlayers');
+        GameApp.UI.ScreenManager.changeScreenTo('#screenSetPlayers');
         $('#playerList .playerListItem').remove();
         var playerNames = GameApp.State.getPlayers();
 
         playerNames.forEach(function (n) {
-            addPlayer({
+            GameApp.UI.PlayerManager.addPlayer({
                 name: n,
                 animate: false
             });
@@ -120,7 +45,10 @@ window.GameApp.UI = (function () {
         }
 
         // Save current players before distributing
-        updatePlayerListInState();
+        if (GameApp.UI.PlayerManager) {
+             GameApp.UI.PlayerManager.updatePlayerListInState();
+        }
+
         var playerNames = GameApp.State.getPlayers();
 
         if (playerNames.length < 3) {
@@ -128,7 +56,7 @@ window.GameApp.UI = (function () {
             return;
         }
 
-        changeScreenTo('#screenDistributeTopic');
+        GameApp.UI.ScreenManager.changeScreenTo('#screenDistributeTopic');
 
         //remove existing elems of show-list
         $('#playerListForShowTopic li').remove();
@@ -153,7 +81,7 @@ window.GameApp.UI = (function () {
     }
 
     function buildScreen3() {
-        changeScreenTo('#screenGameInProgress');
+        GameApp.UI.ScreenManager.changeScreenTo('#screenGameInProgress');
 
         // Populate the game in progress list (optional, but nice)
         var list = $('#playerListForGameInProgress');
@@ -188,14 +116,10 @@ window.GameApp.UI = (function () {
     }
 
     return {
-        changeScreenTo: changeScreenTo,
-        updateCategoryDisplay: updateCategoryDisplay,
-        addPlayer: addPlayer,
-        deletePlayer: deletePlayer,
-        updatePlayerListInState: updatePlayerListInState,
         buildScreen1: buildScreen1,
         buildScreen2: buildScreen2,
         buildScreen3: buildScreen3,
+        updateCategoryDisplay: updateCategoryDisplay,
         revealImpostor: revealImpostor
     };
 })();

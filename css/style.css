@@ -40,16 +40,25 @@
 
 /* Screen transitions */
 .screen {
+    display: none;
+    opacity: 0;
     transition: opacity 0.3s ease-in-out;
+}
+
+.screen.active {
+    display: block;
     opacity: 1;
 }
 
-.fade-out {
-    opacity: 0 !important;
+.screen.leaving {
+    display: block;
+    opacity: 0;
+    pointer-events: none;
 }
 
-.fade-in {
-    opacity: 0 !important;
+.screen.entering {
+    display: block;
+    opacity: 0;
 }
 
 /* Staggered animation for role reveal list */
