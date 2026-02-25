@@ -67,6 +67,24 @@ window.GameApp.UI = (function () {
         return $('#playerList li').length;
     }
 
+    function createPlayerElement(name, animate) {
+        var cloned = $('#playerLiToClone').clone();
+        var inp;
+
+        cloned.removeAttr("id");
+        cloned.removeAttr("style");
+        cloned.addClass('playerListItem');
+
+        if (animate) {
+            cloned.addClass('player-enter');
+        }
+
+        inp = cloned.find(".playerNameInput");
+        inp.val(name);
+
+        return cloned;
+    }
+
     function addPlayer(opts) {
         opts = opts || {};
         var n = opts.name || ("Player" + (numPlayers() + 1));
@@ -74,24 +92,11 @@ window.GameApp.UI = (function () {
             n = "Player" + (numPlayers() + 1);
         }
 
-        var cloned = $('#playerLiToClone').clone(),
-            inp;
-
-        cloned.removeAttr("id");
-        cloned.removeAttr("style");
-        cloned.addClass('playerListItem');
-
-        if (opts.animate) {
-            cloned.addClass('player-enter');
-        }
-
-        cloned.appendTo('#playerList');
-        inp = cloned.find(".playerNameInput");
-        inp.val(n);
+        var $el = createPlayerElement(n, opts.animate);
+        $el.appendTo('#playerList');
 
         if (opts.focus) {
-            inp.focus();
-            inp.select();
+            $el.find(".playerNameInput").focus().select();
         }
 
         updatePlayerListInState();
@@ -120,12 +125,16 @@ window.GameApp.UI = (function () {
         $('#playerList .playerListItem').remove();
         var playerNames = GameApp.State.getPlayers();
 
-        playerNames.forEach(function (n) {
-            addPlayer({
-                name: n,
-                animate: false
-            });
+        var fragment = document.createDocumentFragment();
+
+        playerNames.forEach(function (n, i) {
+            var $el = createPlayerElement(n, false);
+            $el.addClass('player-list-load-item');
+            $el.css('--i', i);
+            fragment.appendChild($el[0]);
         });
+
+        $('#playerList').append(fragment);
 
         $('#distributeTopicButton').hide();
         GameApp.State.gInfos = [];
