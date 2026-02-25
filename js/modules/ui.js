@@ -4,6 +4,33 @@ window.GameApp = window.GameApp || {};
 window.GameApp.UI = (function () {
     "use strict";
 
+    var lastRevealedButton = null;
+
+    // Manage focus when the role modal closes
+    $(document).on('closed.zf.reveal', '#showRoleModal', function () {
+        if (lastRevealedButton) {
+            var $btn = lastRevealedButton;
+            var $li = $btn.closest('li');
+
+            $li.addClass('player-leave');
+
+            // Wait for animation to complete before removing
+            setTimeout(function() {
+                $li.remove();
+
+                // Check if any roles left and manage focus
+                var remaining = $('#playerListForShowTopic li button:not(:disabled)');
+                if (remaining.length > 0) {
+                    remaining.first().focus();
+                } else {
+                    $('#startButton').show().focus();
+                }
+            }, 300); // Matches CSS transition duration
+
+            lastRevealedButton = null;
+        }
+    });
+
     function changeScreenTo(screenId) {
         var $currentScreen = $('.screen:visible');
         var $newScreen = $(screenId);
@@ -158,28 +185,36 @@ window.GameApp.UI = (function () {
             return;
         }
 
-        changeScreenTo('#screenDistributeTopic');
+        var $btn = $('#distributeTopicButton');
+        var originalText = $btn.text();
+        $btn.text("Distributing...").prop('disabled', true).addClass('is-loading');
 
-        //remove existing elems of show-list
-        $('#playerListForShowTopic li').remove();
-        $('#startButton').hide();
+        setTimeout(function() {
+            $btn.text(originalText).prop('disabled', false).removeClass('is-loading');
 
-        // Distribute roles
-        var gInfos = GameApp.Logic.distributeRoles(playerNames, currentTopicInfo);
-        var fragment = document.createDocumentFragment();
+            changeScreenTo('#screenDistributeTopic');
 
-        gInfos.forEach(function (info, i) {
-            var labelText = info.playerName,
-                inp = $("<a class='button large hollow expanded' data-open='showRoleModal'>" + labelText + "</a>"),
-                li = $("<li class='role-reveal-item' style='--i: " + i + ";'>");
-            inp.appendTo(li);
-            inp.on('click', function () {
-                showForPlayer($(this), info);
+            //remove existing elems of show-list
+            $('#playerListForShowTopic li').remove();
+            $('#startButton').hide();
+
+            // Distribute roles
+            var gInfos = GameApp.Logic.distributeRoles(playerNames, currentTopicInfo);
+            var fragment = document.createDocumentFragment();
+
+            gInfos.forEach(function (info, i) {
+                var labelText = info.playerName,
+                    inp = $("<button type='button' class='button large hollow expanded' data-open='showRoleModal'></button>").text(labelText),
+                    li = $("<li class='role-reveal-item' style='--i: " + i + ";'>");
+                inp.appendTo(li);
+                inp.on('click', function () {
+                    showForPlayer($(this), info);
+                });
+                fragment.appendChild(li[0]);
             });
-            fragment.appendChild(li[0]);
-        });
 
-        $('#playerListForShowTopic').append(fragment);
+            $('#playerListForShowTopic').append(fragment);
+        }, 500);
     }
 
     function buildScreen3() {
@@ -204,11 +239,13 @@ window.GameApp.UI = (function () {
         $('#showRoleModal .nameDisplay').html(info.playerName);
         $('#showRoleModal .categoryDisplay').html(info.category);
 
-        obj.closest("li").remove();
-        var remainingPlayerCount = $('#playerListForShowTopic li').length;
-        if (remainingPlayerCount < 1) {
-            $('#startButton').show();
-        }
+        // Mark as revealed and disable interaction
+        // Use setTimeout to allow Foundation's data-open event to fire/bubble first
+        setTimeout(function() {
+            obj.addClass('revealed').prop('disabled', true);
+        }, 10);
+
+        lastRevealedButton = obj;
     }
 
     function revealImpostor() {
