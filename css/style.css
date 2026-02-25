@@ -92,19 +92,44 @@
 .is-invalid-input {
     border-color: #cc4b37 !important;
     background-color: #f9ecea !important;
-    transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 
 .is-invalid-input:focus {
     border-color: #cc4b37 !important;
-    box-shadow: 0 0 5px #cc4b37 !important;
-    background-color: #f9ecea !important;
+    box-shadow: 0 0 0 3px rgba(204, 75, 55, 0.2) !important;
+    background-color: #fff !important; /* Return to white on focus for better readability */
 }
 
 .form-error-message {
-    border-radius: 4px;
-    margin-bottom: 1rem;
-    font-weight: 500;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    padding: 1rem;
+    background-color: #fef2f2; /* Light red background */
+    border: 1px solid #fecaca; /* Red border */
+    color: #991b1b; /* Dark red text */
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    animation: slide-in-down 0.3s ease-out;
+}
+
+.form-error-message::before {
+    content: "⚠️";
+    font-size: 1.25rem;
+}
+
+@keyframes slide-in-down {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Staggered animation for player list on load */
