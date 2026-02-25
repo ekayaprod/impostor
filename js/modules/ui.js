@@ -4,6 +4,9 @@ window.GameApp = window.GameApp || {};
 window.GameApp.UI = (function () {
     "use strict";
 
+    // Private state for handling role reveal flow
+    var pendingRoleRevealLi = null;
+
     function changeScreenTo(screenId) {
         var $currentScreen = $('.screen:visible');
         var $newScreen = $(screenId);
@@ -170,7 +173,7 @@ window.GameApp.UI = (function () {
 
         gInfos.forEach(function (info, i) {
             var labelText = info.playerName,
-                inp = $("<a class='button large hollow expanded' data-open='showRoleModal'>" + labelText + "</a>"),
+                inp = $("<button class='button large hollow expanded' type='button' data-open='showRoleModal'>" + labelText + "</button>"),
                 li = $("<li class='role-reveal-item' style='--i: " + i + ";'>");
             inp.appendTo(li);
             inp.on('click', function () {
@@ -204,11 +207,38 @@ window.GameApp.UI = (function () {
         $('#showRoleModal .nameDisplay').html(info.playerName);
         $('#showRoleModal .categoryDisplay').html(info.category);
 
-        obj.closest("li").remove();
-        var remainingPlayerCount = $('#playerListForShowTopic li').length;
-        if (remainingPlayerCount < 1) {
-            $('#startButton').show();
-        }
+        // Store the element to be removed later (after modal close)
+        pendingRoleRevealLi = obj.closest("li");
+    }
+
+    function handleRoleModalClose() {
+        if (!pendingRoleRevealLi) return;
+
+        var $el = pendingRoleRevealLi;
+        pendingRoleRevealLi = null;
+
+        // Apply exit animation
+        $el.addClass('player-leave');
+
+        var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        // Match CSS animation duration (0.3s) or 0 if reduced motion
+        var delay = prefersReducedMotion ? 0 : 300;
+
+        setTimeout(function() {
+            $el.remove();
+
+            var remainingPlayerCount = $('#playerListForShowTopic li').length;
+            if (remainingPlayerCount < 1) {
+                // No more players: Show and Focus the Start Button
+                $('#startButton').show().focus();
+            } else {
+                // Focus the next available player button to maintain keyboard flow
+                var $nextBtn = $('#playerListForShowTopic li button').first();
+                if ($nextBtn.length) {
+                    $nextBtn.focus();
+                }
+            }
+        }, delay);
     }
 
     function revealImpostor() {
@@ -226,6 +256,7 @@ window.GameApp.UI = (function () {
         buildScreen1: buildScreen1,
         buildScreen2: buildScreen2,
         buildScreen3: buildScreen3,
-        revealImpostor: revealImpostor
+        revealImpostor: revealImpostor,
+        handleRoleModalClose: handleRoleModalClose
     };
 })();

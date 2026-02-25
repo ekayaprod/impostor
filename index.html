@@ -31,19 +31,19 @@
         </ol>
       </div>
       <div id='playerListControls' class='row'>
-        <a id="addPlayerButton" class="button small-6">Add New Player</a>
+        <button id="addPlayerButton" class="button small-6" type="button">Add New Player</button>
       </div>
       <div id='gameControls'>
         <div class='row'>
           <div class='button-group expanded'>
-            <a id="randomTopicButton" class="button">Pick Random Topic</a>
-            <a id="setTopicButton" class="button" data-open="topicInputModal">Set Custom Topic</a>
+            <button id="randomTopicButton" class="button" type="button">Pick Random Topic</button>
+            <button id="setTopicButton" class="button" data-open="topicInputModal" type="button">Set Custom Topic</button>
           </div>
         </div>
 
         <label>Category: <span id="categoryDisplay">Waiting for category selection...</span></label>
         <div class="row">          
-          <a id="distributeTopicButton" class="button success expanded">Distribute Roles</a>
+          <button id="distributeTopicButton" class="button success expanded" type="button">Distribute Roles</button>
         </div>  
 
       </div>
@@ -55,9 +55,9 @@
 <div id='screenDistributeTopic' class='screen row' tabindex="-1" aria-hidden="true" style="display:none;">
   <div class="large-4 columns"><h3></h3></div>
   <div class="large-4 columns">
-    <a id="editGameButton" class="button large expanded">Modify Game Settings</a>
+    <button id="editGameButton" class="button large expanded" type="button">Modify Game Settings</button>
     <ul id='playerListForShowTopic'class="no-bullet"></ul>
-    <a id="startButton" class="button large success expanded">Begin Round</a>
+    <button id="startButton" class="button large success expanded" type="button">Begin Round</button>
   </div>
 
   <div class="large-4 columns"><h3></h3></div>
@@ -70,7 +70,7 @@
 
     <h2>Game Has Started</h2>
     <ul id='playerListForGameInProgress'></ul>
-    <a id='endAndRevealButton' data-open='revealModal' class='button large expanded'>End Game & Reveal Impostor</a>
+    <button id='endAndRevealButton' data-open='revealModal' class='button large expanded' type="button">End Game & Reveal Impostor</button>
   </div>
   <div class="large-4 columns"><h3></h3></div>
 </div>
@@ -119,8 +119,8 @@
   <label>Category: 
     <input id='categoryInput' type='text' placeholder='Enter a category hint' aria-describedby="topicErrorMsg"/>
   </label>
-  <a id="saveAndExitTopicInputModalButton" class="button large success expanded">Save</a>
-  <a id="exitTopicInputModalButton" class="button large expanded alert" data-close>Cancel</a>  
+  <button id="saveAndExitTopicInputModalButton" class="button large success expanded" type="button">Save</button>
+  <button id="exitTopicInputModalButton" class="button large expanded alert" data-close type="button">Cancel</button>
   <button class="close-button" data-close aria-label="Close modal" type="button">
     <span aria-hidden="true">&times;</span>
   </button>

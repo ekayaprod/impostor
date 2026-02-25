@@ -108,6 +108,11 @@ $(document).ready(function () {
         GameApp.UI.updatePlayerListInState();
     });
 
+    // Handle Role Reveal Modal Close to animate out the player button
+    $('#showRoleModal').on('closed.zf.reveal', function () {
+        GameApp.UI.handleRoleModalClose();
+    });
+
     // Start App
     GameApp.UI.buildScreen1();
 });
