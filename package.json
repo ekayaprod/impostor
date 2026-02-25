@@ -1,4 +1,15 @@
 {
+  "name": "impostor-game-assistant",
+  "version": "1.0.0",
+  "description": "A digital game master for the social deduction party game Impostor.",
+  "private": true,
+  "author": "Jules",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "verify": "python3 verify_players.py && python3 verify_topic_flow.py && python3 verify_ui.py"
+  },
   "dependencies": {
     "foundation-sites": "^6.9.0",
     "jquery": "^4.0.0",
