@@ -112,13 +112,14 @@
 
 <div id='topicInputModal' class="reveal" data-reveal>
   <h3>Set a Secret Topic</h3>
+  <div id="topicErrorMsg" class="form-error-message callout alert small" style="display:none;" aria-live="polite"></div>
   <label>Topic: 
-    <input id='topicInput' type='text' placeholder='Enter the secret topic'/>
+    <input id='topicInput' type='text' placeholder='Enter the secret topic' aria-describedby="topicErrorMsg"/>
   </label>
   <label>Category: 
-    <input id='categoryInput' type='text' placeholder='Enter a category hint'/>
+    <input id='categoryInput' type='text' placeholder='Enter a category hint' aria-describedby="topicErrorMsg"/>
   </label>
-  <a id="saveAndExitTopicInputModalButton" class="button large success expanded" data-close>Save</a>
+  <a id="saveAndExitTopicInputModalButton" class="button large success expanded">Save</a>
   <a id="exitTopicInputModalButton" class="button large expanded alert" data-close>Cancel</a>  
   <button class="close-button" data-close aria-label="Close modal" type="button">
     <span aria-hidden="true">&times;</span>

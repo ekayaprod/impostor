@@ -83,3 +83,22 @@
     animation: none;
   }
 }
+
+/* Form validation styles */
+.is-invalid-input {
+    border-color: #cc4b37 !important;
+    background-color: #f9ecea !important;
+    transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.is-invalid-input:focus {
+    border-color: #cc4b37 !important;
+    box-shadow: 0 0 5px #cc4b37 !important;
+    background-color: #f9ecea !important;
+}
+
+.form-error-message {
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
