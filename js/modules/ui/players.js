@@ -46,12 +46,26 @@ window.GameApp.UI.Players = (function () {
 
     function deletePlayer(obj) {
         var li = $(obj).closest(".playerListItem");
-        li.addClass('player-leave');
+        var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        setTimeout(function() {
+        if (prefersReducedMotion) {
             li.remove();
             updatePlayerListInState();
-        }, 300);
+            return;
+        }
+
+        li.addClass('player-leave');
+
+        var transitionEnded = false;
+        function onEnd() {
+            if (transitionEnded) return;
+            transitionEnded = true;
+            li.remove();
+            updatePlayerListInState();
+        }
+
+        li.one('animationend transitionend', onEnd);
+        setTimeout(onEnd, 350);
     }
 
     function updatePlayerListInState() {
