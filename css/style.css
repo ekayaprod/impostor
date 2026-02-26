@@ -158,3 +158,17 @@
     animation: none;
   }
 }
+
+/* Button transitions */
+.button {
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.button:active {
+    transform: scale(0.98);
+}
+
+/* Input transitions */
+input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], input[type="color"], textarea {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}

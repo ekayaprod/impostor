@@ -58,11 +58,11 @@ $(document).ready(function () {
         if (errors.length > 0) {
             var msg = "";
             if (errors.includes("topic") && errors.includes("category")) {
-                msg = "Please enter both a secret topic and a category hint to start.";
+                msg = "Let's get started! Please add a Secret Topic and a Category hint.";
             } else if (errors.includes("topic")) {
-                msg = "The game needs a secret topic to begin.";
+                msg = "We need a Secret Topic to start the round. Can you add one?";
             } else {
-                msg = "Please add a category hint so players know what to expect.";
+                msg = "Don't leave the Impostor guessing—give them a Category hint!";
             }
 
             $errorMsg.text(msg).slideDown();
