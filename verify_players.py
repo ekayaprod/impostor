@@ -18,7 +18,12 @@ def verify_players():
             # Wait for the input to appear and be focused
             page.wait_for_selector(f"#playerList li:nth-child({i}) input")
             page.fill(f"#playerList li:nth-child({i}) input", f"Player {i}")
+            # Ensure blur to trigger change event immediately (for debounced inputs)
+            page.keyboard.press("Tab")
             print(f"Added Player {i}")
+
+        # Wait for debounce/animation to settle before verifying state persistence
+        page.wait_for_timeout(500)
 
         # Verify count
         players = page.locator("#playerList li")

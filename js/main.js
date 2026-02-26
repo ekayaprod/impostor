@@ -104,8 +104,16 @@ $(document).ready(function () {
         GameApp.UI.deletePlayer(this);
     });
 
-    $(document).on('input', '.playerNameInput', function() {
+    var debouncedUpdate = _.debounce(function() {
         GameApp.UI.updatePlayerListInState();
+    }, 300);
+
+    $(document).on('input', '.playerNameInput', debouncedUpdate);
+
+    // Ensure state is saved immediately on blur/change to prevent data loss if user leaves quickly
+    $(document).on('change', '.playerNameInput', function() {
+        GameApp.UI.updatePlayerListInState();
+        debouncedUpdate.cancel(); // Cancel pending debounce since we just saved
     });
 
     // Start App
