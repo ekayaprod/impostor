@@ -12,9 +12,17 @@ window.GameApp.UI.Screens.Game = (function () {
         // Populate the game in progress list
         var list = $('#playerListForGameInProgress');
         list.empty();
-        GameApp.State.getPlayers().forEach(function(name) {
-            list.append('<li>' + name + '</li>');
+
+        var fragment = document.createDocumentFragment();
+        GameApp.State.getPlayers().forEach(function(name, i) {
+            var li = document.createElement('li');
+            li.textContent = name;
+            li.className = 'game-player-item';
+            li.style.setProperty('--i', i);
+            fragment.appendChild(li);
         });
+
+        list.append(fragment);
     }
 
     return {
