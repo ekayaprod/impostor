@@ -57,10 +57,21 @@ window.GameApp.UI.Players = (function () {
 
     function deletePlayer(obj) {
         var li = $(obj).closest(".playerListItem");
+
+        // Fix focus dropping to body: Try to focus adjacent player's delete button or add button
+        var nextBtn = li.next('.playerListItem').find('.deletePlayer');
+        if (nextBtn.length === 0) {
+            nextBtn = li.prev('.playerListItem').find('.deletePlayer');
+        }
+        if (nextBtn.length === 0) {
+            nextBtn = $('#addPlayerButton');
+        }
+
         var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         if (prefersReducedMotion) {
             li.remove();
+            nextBtn.focus();
             updatePlayerListInState();
             return;
         }
@@ -72,6 +83,7 @@ window.GameApp.UI.Players = (function () {
             if (transitionEnded) return;
             transitionEnded = true;
             li.remove();
+            nextBtn.focus();
             updatePlayerListInState();
         }
 

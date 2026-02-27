@@ -90,7 +90,8 @@
 </div>
 
 
-<div id='showRoleModal' class="reveal" data-reveal>
+<div id='showRoleModal' class="reveal" data-reveal aria-labelledby="showRoleModalTitle">
+  <span id="showRoleModalTitle" class="sr-only">Player Secret Role Reveal</span>
   <span>Hello, </span><span class='nameDisplay'></span>.
   <div class="row">
     <span class='topicDisplayLabel'>
@@ -112,7 +113,8 @@
 
 </div>
 
-<div id='revealModal' class="reveal" data-reveal>
+<div id='revealModal' class="reveal" data-reveal aria-labelledby="revealModalTitle">
+<h3 id="revealModalTitle" class="sr-only">Game Over - Impostor Revealed</h3>
 <strong class='impostorName'></strong> was the Impostor!<br/>
 <label>The topic was "<strong class='topic'></strong>"</label>
 <h3></h3>

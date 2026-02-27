@@ -21,9 +21,20 @@ $(document).ready(function () {
     });
 
     $('#randomTopicButton').on('click', function () {
-        var topicInfo = GameApp.Logic.setRandomTopic();
-        GameApp.State.currentTopicInfo = topicInfo;
-        GameApp.UI.updateCategoryDisplay();
+        var $btn = $(this);
+        $btn.addClass('is-loading');
+
+        // Optimistic UI delay for perceived performance
+        setTimeout(function() {
+            var topicInfo = GameApp.Logic.setRandomTopic();
+            GameApp.State.currentTopicInfo = topicInfo;
+            GameApp.UI.updateCategoryDisplay();
+
+            $btn.removeClass('is-loading').addClass('success-pulse');
+            setTimeout(function() {
+                $btn.removeClass('success-pulse');
+            }, 400);
+        }, 300);
     });
 
     $('#saveAndExitTopicInputModalButton').on('click', function () {
@@ -71,14 +82,21 @@ $(document).ready(function () {
             }
             return false;
         } else {
-            GameApp.State.currentTopicInfo = info;
-            // Explicitly call the update method from the facade
-            if (GameApp.UI.Screens && GameApp.UI.Screens.updateCategoryDisplay) {
-                GameApp.UI.Screens.updateCategoryDisplay();
-            } else if (GameApp.UI.updateCategoryDisplay) {
-                GameApp.UI.updateCategoryDisplay();
-            }
-            $('#topicInputModal').foundation('close');
+            var $btn = $(this);
+            $btn.addClass('is-loading');
+
+            setTimeout(function() {
+                GameApp.State.currentTopicInfo = info;
+                // Explicitly call the update method from the facade
+                if (GameApp.UI.Screens && GameApp.UI.Screens.updateCategoryDisplay) {
+                    GameApp.UI.Screens.updateCategoryDisplay();
+                } else if (GameApp.UI.updateCategoryDisplay) {
+                    GameApp.UI.updateCategoryDisplay();
+                }
+
+                $btn.removeClass('is-loading');
+                $('#topicInputModal').foundation('close');
+            }, 300);
         }
     });
 
