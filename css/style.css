@@ -128,6 +128,28 @@
     opacity: 1;
     animation: none;
   }
+  .game-player-item {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+/* Staggered animation for game player list */
+.game-player-item {
+  opacity: 0; /* Start hidden */
+  animation: slide-in-fade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: calc(var(--i) * 0.1s);
+}
+
+@keyframes slide-in-fade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Form validation styles */
