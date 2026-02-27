@@ -79,23 +79,83 @@
 /* Empty State */
 .empty-state-message {
     text-align: center;
-    padding: 2rem;
-    color: #666;
-    background: #f8f8f8;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    border: 2px dashed #ddd;
+    padding: 2.5rem 2rem;
+    color: #555;
+    background: #fafafa;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    border: 2px dashed #e0e0e0;
+    transition: all 0.3s ease;
 }
 
 .empty-state-message h3 {
-    color: #444;
-    font-size: 1.2rem;
+    color: #2c3e50;
+    font-size: 1.3rem;
+    font-weight: 600;
     margin-bottom: 0.5rem;
 }
 
 .empty-state-message p {
     margin-bottom: 0;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    color: #7f8c8d;
+}
+
+/* Player Card Styling */
+.player-card {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    padding: 0.5rem;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: all 0.2s ease;
+}
+
+.player-card:hover, .player-card:focus-within {
+    border-color: #b3b3b3;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.player-card input.playerNameInput {
+    border: none;
+    box-shadow: none;
+    margin: 0;
+    padding: 0.5rem;
+    font-size: 1.1rem;
+    flex: 1;
+    background: transparent;
+}
+
+.player-card input.playerNameInput:focus {
+    border: none;
+    box-shadow: none;
+    background: transparent;
+}
+
+.player-card .remove-player-btn {
+    margin: 0;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    line-height: 1;
+    border-radius: 50%;
+    color: #999;
+    border: none;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+.player-card .remove-player-btn:hover, .player-card .remove-player-btn:focus {
+    background: #fee2e2;
+    color: #ef4444;
+    outline: none;
 }
 
 /* Staggered animation for role reveal list */

@@ -4,7 +4,7 @@ def verify_players():
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
-        page.goto("http://localhost:8080/index.html")
+        page.goto("http://localhost:3000/index.html")
 
         # Initial state: 0 players
         initial_players = page.locator("#playerList li")
@@ -34,6 +34,13 @@ def verify_players():
         for i in range(1, 4):
             name_input = page.locator(f"#playerList li:nth-child({i}) input")
             assert name_input.input_value() == f"Player {i}"
+
+        # Verify aria-labels on delete buttons
+        for i in range(1, 4):
+            delete_btn = page.locator(f"#playerList li:nth-child({i}) .deletePlayer")
+            expected_label = f"Remove Player {i}"
+            print(f"Checking aria-label for Player {i}: {delete_btn.get_attribute('aria-label')}")
+            assert delete_btn.get_attribute("aria-label") == expected_label
 
         # Reload page to verify persistence (and buildScreen1 logic)
         page.reload()

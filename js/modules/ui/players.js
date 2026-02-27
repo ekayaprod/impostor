@@ -29,6 +29,10 @@ window.GameApp.UI.Players = (function () {
         inp = cloned.find(".playerNameInput");
         inp.val(name);
 
+        // Update aria-label for delete button to be specific
+        var deleteBtn = cloned.find(".deletePlayer");
+        deleteBtn.attr("aria-label", "Remove " + name);
+
         return cloned;
     }
 
@@ -76,6 +80,13 @@ window.GameApp.UI.Players = (function () {
     }
 
     function updatePlayerListInState() {
+        // Also update the aria-labels of delete buttons when names change
+        $('#playerList .playerListItem').each(function() {
+            var $li = $(this);
+            var name = $li.find('.playerNameInput').val();
+            $li.find('.deletePlayer').attr('aria-label', 'Remove ' + name);
+        });
+
         var names = $('#playerList .playerNameInput').map(function () {
             return this.value;
         }).get();
