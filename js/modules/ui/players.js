@@ -9,6 +9,11 @@ window.GameApp.UI.Players = (function () {
         return $('#playerList li').length;
     }
 
+    // Helper to get only the player list items, ignoring empty state or other potential children
+    function getPlayerListItems() {
+        return $('#playerList li.playerListItem');
+    }
+
     function createPlayerElement(name, animate) {
         var cloned = $('#playerLiToClone').clone();
         var inp;
@@ -29,9 +34,11 @@ window.GameApp.UI.Players = (function () {
 
     function addPlayer(opts) {
         opts = opts || {};
-        var n = opts.name || ("Player" + (numPlayers() + 1));
+        // Use getPlayerListItems to get accurate count of actual players
+        var currentCount = getPlayerListItems().length;
+        var n = opts.name || ("Player" + (currentCount + 1));
         if (typeof n !== 'string' || n.trim().length === 0) {
-            n = "Player" + (numPlayers() + 1);
+            n = "Player" + (currentCount + 1);
         }
 
         var $el = createPlayerElement(n, opts.animate);
