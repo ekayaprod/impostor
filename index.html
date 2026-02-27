@@ -17,6 +17,9 @@
   <script type="text/javascript" src="js/modules/ui/transitions.js"></script>
   <script type="text/javascript" src="js/modules/ui/players.js"></script>
   <script type="text/javascript" src="js/modules/ui/screens.js"></script>
+  <script type="text/javascript" src="js/modules/ui/screens/setup.js"></script>
+  <script type="text/javascript" src="js/modules/ui/screens/distribute.js"></script>
+  <script type="text/javascript" src="js/modules/ui/screens/game.js"></script>
   <script type="text/javascript" src="js/modules/ui/modals.js"></script>
   <script type="text/javascript" src="js/modules/ui.js"></script>
   <script type="text/javascript" src="js/main.js"></script>
@@ -33,6 +36,10 @@
     
     <div id='playerListDiv' class="large-4 large-offset-4 columns end">
       <div class='row'>
+        <div id="emptyPlayerState" class="empty-state-message" style="display:none;">
+          <h3>👥 No Players Yet</h3>
+          <p>Add some friends to get started!</p>
+        </div>
         <ol id='playerList' class='no-bullet'>
 
         </ol>
@@ -48,7 +55,7 @@
           </div>
         </div>
 
-        <label>Category: <span id="categoryDisplay">Waiting for category selection...</span></label>
+        <label>Category: <span id="categoryDisplay">No category selected</span></label>
         <div class="row">          
           <a id="distributeTopicButton" class="button success expanded">Distribute Roles</a>
         </div>  

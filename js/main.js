@@ -72,7 +72,12 @@ $(document).ready(function () {
             return false;
         } else {
             GameApp.State.currentTopicInfo = info;
-            GameApp.UI.updateCategoryDisplay();
+            // Explicitly call the update method from the facade
+            if (GameApp.UI.Screens && GameApp.UI.Screens.updateCategoryDisplay) {
+                GameApp.UI.Screens.updateCategoryDisplay();
+            } else if (GameApp.UI.updateCategoryDisplay) {
+                GameApp.UI.updateCategoryDisplay();
+            }
             $('#topicInputModal').foundation('close');
         }
     });
