@@ -26,7 +26,7 @@ window.GameApp.UI.Screens.Distribute = (function () {
 
         //remove existing elems of show-list
         $('#playerListForShowTopic li').remove();
-        $('#startButton').hide();
+        $('#startButton').hide().removeClass('fade-enter').removeClass('fade-leave');
 
         // Distribute roles
         var gInfos = GameApp.Logic.distributeRoles(playerNames, currentTopicInfo);

@@ -238,6 +238,7 @@
     gap: 0.75rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     animation: slide-in-down 0.3s ease-out;
+    will-change: transform, opacity, height;
 }
 
 .form-error-message::before {

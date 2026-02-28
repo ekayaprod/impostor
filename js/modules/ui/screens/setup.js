@@ -21,10 +21,20 @@ window.GameApp.UI.Screens.Setup = (function () {
         // However, let's be safe and use .playerListItem class if available.
         var num = $('#playerList .playerListItem').length;
 
+        var $distBtn = $('#distributeTopicButton');
         if (num > 2 && info && info.topic && info.category) {
-            $('#distributeTopicButton').show();
+            if ($distBtn.is(':hidden') || $distBtn.hasClass('fade-leave')) {
+                $distBtn.show().removeClass('fade-leave').addClass('fade-enter');
+            }
         } else {
-            $('#distributeTopicButton').hide();
+            if ($distBtn.is(':visible') || $distBtn.hasClass('fade-enter')) {
+                $distBtn.removeClass('fade-enter').addClass('fade-leave');
+                setTimeout(function() {
+                     if ($distBtn.hasClass('fade-leave')) {
+                         $distBtn.hide();
+                     }
+                }, 300);
+            }
         }
 
         // Handle Empty State Visibility
@@ -63,7 +73,7 @@ window.GameApp.UI.Screens.Setup = (function () {
 
         $('#playerList').append(fragment);
 
-        $('#distributeTopicButton').hide();
+        $('#distributeTopicButton').hide().removeClass('fade-enter').removeClass('fade-leave');
         GameApp.State.gInfos = [];
         GameApp.State.currentTopicInfo = null;
         updateCategoryDisplay();

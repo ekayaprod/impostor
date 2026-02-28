@@ -51,7 +51,11 @@ window.GameApp.UI.Modals = (function () {
             var remainingPlayerCount = $('#playerListForShowTopic li').length;
 
             if (remainingPlayerCount < 1) {
-                $('#startButton').show().focus();
+                var $startBtn = $('#startButton');
+                if ($startBtn.is(':hidden') || $startBtn.hasClass('fade-leave')) {
+                    $startBtn.show().removeClass('fade-leave').addClass('fade-enter');
+                }
+                $startBtn.focus();
             } else if ($nextButton.length) {
                 $nextButton.focus();
             } else {
