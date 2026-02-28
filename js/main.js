@@ -17,7 +17,7 @@ $(document).ready(function () {
         //clear the dialog and error state
         $('#topicInputModal #topicInput').val("").removeClass('is-invalid-input');
         $('#topicInputModal #categoryInput').val("").removeClass('is-invalid-input');
-        $('#topicErrorMsg').hide();
+        $('#topicErrorMsg').removeClass('is-visible');
     });
 
     $('#randomTopicButton').on('click', function () {
@@ -50,7 +50,7 @@ $(document).ready(function () {
         // Reset error states
         $topicInput.removeClass('is-invalid-input').removeAttr('aria-invalid');
         $categoryInput.removeClass('is-invalid-input').removeAttr('aria-invalid');
-        $errorMsg.hide().empty();
+        $errorMsg.removeClass('is-visible').empty();
 
         var errors = [];
         var firstErrorInput = null;
@@ -76,7 +76,7 @@ $(document).ready(function () {
                 msg = "Don't leave the Impostor guessing—give them a Category hint!";
             }
 
-            $errorMsg.text(msg).slideDown();
+            $errorMsg.text(msg).addClass('is-visible');
             if (firstErrorInput) {
                 firstErrorInput.focus();
             }
@@ -105,7 +105,7 @@ $(document).ready(function () {
         $(this).removeClass('is-invalid-input');
         // If both inputs are now valid (or at least being edited), hide the main error message
         // A simple approach is to hide it as soon as user interacts, assuming they are fixing it.
-        $('#topicErrorMsg').slideUp();
+        $('#topicErrorMsg').removeClass('is-visible');
     });
 
     $('#editGameButton').on('click', function() {
