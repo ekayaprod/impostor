@@ -1,0 +1,3 @@
+## 2024-05-27 - [Optimistic UI on Selection & Focus Focus Trap on Deletion]
+**Learning:** Adding `.is-loading` UI visual feedback to the 'Random Topic' and 'Set Custom Topic' buttons creates a delightful, perceived performance improvement. When an interactive element (like a player row) is deleted, the DOM drops the user focus to the `body`, which is an accessibility anti-pattern.
+**Action:** Always shift programmatic focus `.focus()` to adjacent elements when deleting DOM nodes. Add temporary `.is-loading` state CSS using standard button pulse visual feedback patterns to replace immediate blocking interactions.

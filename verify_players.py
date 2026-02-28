@@ -4,7 +4,7 @@ def verify_players():
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
-        page.goto("http://localhost:3000/index.html")
+        page.goto("http://localhost:8080/index.html")
 
         # Initial state: 0 players
         initial_players = page.locator("#playerList li")

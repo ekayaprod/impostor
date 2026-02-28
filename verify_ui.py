@@ -4,7 +4,7 @@ def verify_changes():
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
-        page.goto("http://localhost:3000/index.html")
+        page.goto("http://localhost:8080/index.html")
 
         # Check Title
         print(f"Page title: {page.title()}")
