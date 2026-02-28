@@ -139,6 +139,7 @@ $(document).ready(function () {
 
     var debouncedUpdate = _.debounce(function() {
         GameApp.UI.updatePlayerListInState();
+        $('#setupErrorMsg').removeClass('is-visible');
     }, 300);
 
     $(document).on('input', '.playerNameInput', debouncedUpdate);
@@ -146,6 +147,7 @@ $(document).ready(function () {
     // Ensure state is saved immediately on blur/change to prevent data loss if user leaves quickly
     $(document).on('change', '.playerNameInput', function() {
         GameApp.UI.updatePlayerListInState();
+        $('#setupErrorMsg').removeClass('is-visible');
         debouncedUpdate.cancel(); // Cancel pending debounce since we just saved
     });
 

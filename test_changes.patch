@@ -1,0 +1,79 @@
+--- index.html
++++ index.html
+@@ -52,6 +52,7 @@
+         </div>
+
+         <label>Category: <span id="categoryDisplay">No category selected</span></label>
++        <div id="setupErrorMsg" class="form-error-message" aria-live="polite"></div>
+         <div class="row">
+           <a id="distributeTopicButton" class="button success expanded">Distribute Roles</a>
+         </div>
+--- js/modules/ui/screens/setup.js
++++ js/modules/ui/screens/setup.js
+@@ -21,11 +21,10 @@
+         var num = $('#playerList .playerListItem').length;
+
++        $('#distributeTopicButton').show();
++
+         if (num > 2 && info && info.topic && info.category) {
+-            $('#distributeTopicButton').show();
+-        } else {
+-            $('#distributeTopicButton').hide();
++            $('#setupErrorMsg').removeClass('is-visible');
+         }
+
+         // Handle Empty State Visibility
+@@ -62,7 +61,8 @@
+
+         $('#playerList').append(fragment);
+
+-        $('#distributeTopicButton').hide();
++        $('#setupErrorMsg').removeClass('is-visible').empty();
++        $('#distributeTopicButton').show();
+         GameApp.State.gInfos = [];
+         GameApp.State.currentTopicInfo = null;
+         updateCategoryDisplay();
+--- js/modules/ui/screens/distribute.js
++++ js/modules/ui/screens/distribute.js
+@@ -9,18 +9,30 @@
+
+     function buildScreen2() {
+-        var currentTopicInfo = GameApp.State.currentTopicInfo;
+-        if (!currentTopicInfo) {
+-            console.log("Can't proceed - no topic set.");
+-            return;
+-        }
+-
+         // Save current players before distributing
+         GameApp.UI.Players.updatePlayerListInState();
+         var playerNames = GameApp.State.getPlayers();
++        var currentTopicInfo = GameApp.State.currentTopicInfo;
+
+-        if (playerNames.length < 3) {
+-            alert("You need at least 3 players to play!");
++        var errors = [];
++        if (playerNames.length < 3) {
++            errors.push("players");
++        }
++        if (!currentTopicInfo || !currentTopicInfo.topic || !currentTopicInfo.category) {
++            errors.push("topic");
++        }
++
++        var $errorMsg = $('#setupErrorMsg');
++
++        if (errors.length > 0) {
++            var msg = "";
++            if (errors.includes("players") && errors.includes("topic")) {
++                msg = "We need at least 3 artists and a secret topic before we can start!";
++            } else if (errors.includes("players")) {
++                msg = "An art studio needs a crowd. Invite at least 3 artists to play!";
++            } else {
++                msg = "What are we painting? Please pick or set a secret topic first!";
++            }
++
++            $errorMsg.text(msg).addClass('is-visible');
+             return;
+         }
+
++        $errorMsg.removeClass('is-visible');
+         GameApp.UI.Transitions.changeScreenTo('#screenDistributeTopic');
