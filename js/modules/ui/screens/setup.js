@@ -21,10 +21,10 @@ window.GameApp.UI.Screens.Setup = (function () {
         // However, let's be safe and use .playerListItem class if available.
         var num = $('#playerList .playerListItem').length;
 
+        $('#distributeTopicButton').show();
+
         if (num > 2 && info && info.topic && info.category) {
-            $('#distributeTopicButton').show();
-        } else {
-            $('#distributeTopicButton').hide();
+            $('#setupErrorMsg').removeClass('is-visible');
         }
 
         // Handle Empty State Visibility
@@ -63,7 +63,8 @@ window.GameApp.UI.Screens.Setup = (function () {
 
         $('#playerList').append(fragment);
 
-        $('#distributeTopicButton').hide();
+        $('#setupErrorMsg').removeClass('is-visible').empty();
+        $('#distributeTopicButton').show();
         GameApp.State.gInfos = [];
         GameApp.State.currentTopicInfo = null;
         updateCategoryDisplay();
