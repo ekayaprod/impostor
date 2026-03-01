@@ -1,0 +1,1 @@
+## 2024-05-09 - [Extract Skeletons] **Learning:** [Dynamic CSS variables used for staggered animations (`--i`) should be kept inline, while static layout properties like `height` and `margin` should be extracted to CSS classes.] **Action:** [When eradicating inline styles, explicitly separate static CSS rules from dynamic JS-calculated values.]
