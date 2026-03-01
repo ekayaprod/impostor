@@ -399,3 +399,63 @@ input[type="text"], input[type="password"], input[type="date"], input[type="date
     white-space: nowrap;
     border-width: 0;
 }
+
+/* Modals UI Polish */
+.role-reveal-card,
+.game-over-card {
+    padding: 1rem;
+}
+
+.modal-header {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+}
+
+.role-details {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e9ecef;
+}
+
+.topic-row {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.category-row {
+    color: #6c757d;
+}
+
+.helper-text {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.impostor-reveal-text {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.topic-reveal-label {
+    font-size: 1.1rem;
+    color: #495057;
+}
+
+.spacer {
+    height: 2rem;
+}
+
+.primary-action-btn {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Emphasis Classes */
+.text-primary { color: #007bff; }
+.text-success { color: #28a745; }
+.text-alert { color: #dc3545; }
+.text-muted { color: #6c757d; }
+.text-center { text-align: center; }

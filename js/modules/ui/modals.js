@@ -14,7 +14,7 @@ window.GameApp.UI.Modals = (function () {
         $('#showRoleModal').data('trigger-btn', obj);
 
         if (info.isImpostor) {
-            $('#showRoleModal .topicDisplay').html("You are the Impostor.");
+            $('#showRoleModal .topicDisplay').html("You are the Impostor! Blend in and guess the topic.");
             $('#showRoleModal .topicDisplayLabel').hide();
         } else {
             $('#showRoleModal .topicDisplay').html(info.topic);
