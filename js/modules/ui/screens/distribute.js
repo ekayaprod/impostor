@@ -56,8 +56,8 @@ window.GameApp.UI.Screens.Distribute = (function () {
         skeletonFragment.appendChild($announcer[0]);
 
         gInfos.forEach(function (info, i) {
-            var li = $("<li class='role-reveal-item' style='--i: " + i + "; margin-bottom: 1rem;'>");
-            var skeleton = $("<div class='skeleton' style='height: 3.5rem; border-radius: 8px;'></div>");
+            var li = $("<li class='role-reveal-item role-reveal-skeleton' style='--i: " + i + ";'>");
+            var skeleton = $("<div class='skeleton'></div>");
             li.append(skeleton);
             skeletonFragment.appendChild(li[0]);
         });
