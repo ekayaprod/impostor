@@ -11,3 +11,7 @@
 ## 2024-10-25 - [Split & Polished: EmptyState Module]
 **Learning:** The EmptyState display logic was tangled inside the setup screen's updateCategoryDisplay function, making the component responsible for too many disjointed UI states.
 **Action:** Extracted the EmptyState visibility toggle into a dedicated `js/modules/ui/emptyState.js` component, using pure CSS fade classes for seamless mount/unmount boundaries.
+
+## 2024-10-25 - [Split & Polished: Distribute Screen]
+**Learning:** `js/modules/ui/screens/distribute.js`'s `buildScreen2` was a "God Component". It handled everything from validation and displaying errors to generating skeleton loaders and swapping them with player buttons using an abrupt DOM swap.
+**Action:** Splitting `buildScreen2` into distinct sub-components: `validateSetup`, `displayErrors`, `renderSkeletons`, and `renderPlayerButtons`. A smooth opacity transition was added to `renderPlayerButtons` so that the loading skeletons fade out before the player reveal buttons seamlessly fade in, resolving the jarring swap.
