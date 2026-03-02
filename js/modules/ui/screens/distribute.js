@@ -6,12 +6,7 @@ window.GameApp.UI.Screens = window.GameApp.UI.Screens || {};
 window.GameApp.UI.Screens.Distribute = (function () {
     "use strict";
 
-    function buildScreen2() {
-        // Save current players before distributing
-        GameApp.UI.Players.updatePlayerListInState();
-        var playerNames = GameApp.State.getPlayers();
-        var currentTopicInfo = GameApp.State.currentTopicInfo;
-
+    function validateSetup(playerNames, currentTopicInfo) {
         var errors = [];
         if (playerNames.length < 3) {
             errors.push("players");
@@ -19,24 +14,95 @@ window.GameApp.UI.Screens.Distribute = (function () {
         if (!currentTopicInfo || !currentTopicInfo.topic || !currentTopicInfo.category) {
             errors.push("topic");
         }
+        return errors;
+    }
 
+    function displayErrors(errors) {
         var $errorMsg = $('#setupErrorMsg');
+        var msg = "";
+        if (errors.includes("players") && errors.includes("topic")) {
+            msg = "We need at least 3 artists and a secret topic before we can start!";
+        } else if (errors.includes("players")) {
+            msg = "An art studio needs a crowd. Invite at least 3 artists to play!";
+        } else {
+            msg = "What are we painting? Please pick or set a secret topic first!";
+        }
+        $errorMsg.text(msg).addClass('is-visible');
+    }
+
+    function renderSkeletons(gInfos, $container) {
+        var skeletonFragment = document.createDocumentFragment();
+
+        // Add aria-live announcer for accessibility
+        var $announcer = $("<div aria-live='polite' class='sr-only role-announcer'>Assigning secret roles...</div>");
+        skeletonFragment.appendChild($announcer[0]);
+
+        gInfos.forEach(function (info, i) {
+            var li = $("<li class='role-reveal-item role-reveal-skeleton' style='--i: " + i + "; transition: opacity 0.3s ease; opacity: 1;'>");
+            var skeleton = $("<div class='skeleton'></div>");
+            li.append(skeleton);
+            skeletonFragment.appendChild(li[0]);
+        });
+
+        $container.append(skeletonFragment);
+    }
+
+    function renderPlayerButtons(gInfos, $container) {
+        var fragment = document.createDocumentFragment();
+        gInfos.forEach(function (info, i) {
+            var labelText = info.playerName,
+                inp = $("<a class='button large hollow expanded' data-open='showRoleModal'>" + labelText + "</a>"),
+                li = $("<li class='role-reveal-item' style='--i: " + i + "; transition: opacity 0.3s ease; opacity: 0;'>");
+            inp.appendTo(li);
+            inp.on('click', function () {
+                // Ensure Modals is available
+                if (GameApp.UI.Modals) {
+                    GameApp.UI.Modals.showForPlayer($(this), info);
+                } else if (GameApp.UI.showForPlayer) {
+                    // Fallback to facade if needed
+                    GameApp.UI.showForPlayer($(this), info);
+                } else {
+                    console.error("Modals module not loaded");
+                }
+            });
+            fragment.appendChild(li[0]);
+        });
+
+        // Smooth transition by fading out skeletons first
+        var $skeletons = $container.find('.role-reveal-skeleton');
+        $skeletons.css('opacity', '0');
+
+        setTimeout(function() {
+            $container.empty().append(fragment);
+
+            // Fade in the new items
+            // Small timeout to ensure DOM update before triggering CSS transition
+            setTimeout(function() {
+                 $container.find('.role-reveal-item').css('opacity', '1');
+            }, 50);
+
+            // Announce completion
+            $container.append("<div aria-live='polite' class='sr-only role-announcer'>Roles assigned</div>");
+
+            // Set focus to the first button for accessibility
+            $container.find('a').first().focus();
+        }, 300); // Wait for skeleton fade out
+    }
+
+    function buildScreen2() {
+        // Save current players before distributing
+        GameApp.UI.Players.updatePlayerListInState();
+        var playerNames = GameApp.State.getPlayers();
+        var currentTopicInfo = GameApp.State.currentTopicInfo;
+
+        var errors = validateSetup(playerNames, currentTopicInfo);
 
         if (errors.length > 0) {
-            var msg = "";
-            if (errors.includes("players") && errors.includes("topic")) {
-                msg = "We need at least 3 artists and a secret topic before we can start!";
-            } else if (errors.includes("players")) {
-                msg = "An art studio needs a crowd. Invite at least 3 artists to play!";
-            } else {
-                msg = "What are we painting? Please pick or set a secret topic first!";
-            }
-
-            $errorMsg.text(msg).addClass('is-visible');
+            displayErrors(errors);
             return;
         }
 
-        $errorMsg.removeClass('is-visible');
+        $('#setupErrorMsg').removeClass('is-visible');
 
         GameApp.UI.Transitions.changeScreenTo('#screenDistributeTopic');
 
@@ -49,50 +115,11 @@ window.GameApp.UI.Screens.Distribute = (function () {
         var $playerListContainer = $('#playerListForShowTopic');
 
         // 1. Show Loading Skeletons for Delight and Perceived Performance
-        var skeletonFragment = document.createDocumentFragment();
-
-        // Add aria-live announcer for accessibility
-        var $announcer = $("<div aria-live='polite' class='sr-only role-announcer'>Assigning secret roles...</div>");
-        skeletonFragment.appendChild($announcer[0]);
-
-        gInfos.forEach(function (info, i) {
-            var li = $("<li class='role-reveal-item role-reveal-skeleton' style='--i: " + i + ";'>");
-            var skeleton = $("<div class='skeleton'></div>");
-            li.append(skeleton);
-            skeletonFragment.appendChild(li[0]);
-        });
-
-        $playerListContainer.append(skeletonFragment);
+        renderSkeletons(gInfos, $playerListContainer);
 
         // 2. Swap Skeletons with Real Buttons after a delay
         setTimeout(function() {
-            var fragment = document.createDocumentFragment();
-            gInfos.forEach(function (info, i) {
-                var labelText = info.playerName,
-                    inp = $("<a class='button large hollow expanded' data-open='showRoleModal'>" + labelText + "</a>"),
-                    li = $("<li class='role-reveal-item' style='--i: " + i + ";'>");
-                inp.appendTo(li);
-                inp.on('click', function () {
-                    // Ensure Modals is available
-                    if (GameApp.UI.Modals) {
-                        GameApp.UI.Modals.showForPlayer($(this), info);
-                    } else if (GameApp.UI.showForPlayer) {
-                        // Fallback to facade if needed
-                        GameApp.UI.showForPlayer($(this), info);
-                    } else {
-                        console.error("Modals module not loaded");
-                    }
-                });
-                fragment.appendChild(li[0]);
-            });
-
-            $playerListContainer.empty().append(fragment);
-
-            // Announce completion
-            $playerListContainer.append("<div aria-live='polite' class='sr-only role-announcer'>Roles assigned</div>");
-
-            // Set focus to the first button for accessibility
-            $playerListContainer.find('a').first().focus();
+            renderPlayerButtons(gInfos, $playerListContainer);
         }, 800);
     }
 
