@@ -19,3 +19,7 @@
 ## 2026-02-28 - Custom Topic Modal Error Message
 **Learning:** `slideDown` and `slideUp` JS animations used for `#topicErrorMsg` caused layout thrashing, blocked the main thread, and ignored `prefers-reduced-motion`.
 **Action:** Replaced JS-based `slideDown`/`slideUp` with pure CSS equivalents using `.is-visible` transition states. The base element now defines `max-height: 0`, `opacity: 0`, `padding: 0`, `border-width: 0` and toggling the class smoothly transitions to normal properties. Also added `@media (prefers-reduced-motion: reduce)` to disable the transition.
+
+## 2026-03-02 - Empty State Toggle
+**Learning:** Using JS logic (`.show()`, `.hide()`, and `setTimeout`) for managing empty state UI introduces layout thrashing and couples CSS logic with JS.
+**Action:** Replaced with pure CSS transitions triggered by toggling an `.is-visible` class. Using `max-height`, `opacity`, and `pointer-events`, the empty state component gracefully scales while providing fallbacks for `prefers-reduced-motion`.
