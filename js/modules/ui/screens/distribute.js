@@ -38,7 +38,7 @@ window.GameApp.UI.Screens.Distribute = (function () {
         skeletonFragment.appendChild($announcer[0]);
 
         gInfos.forEach(function (info, i) {
-            var li = $("<li class='role-reveal-item role-reveal-skeleton' style='--i: " + i + "; transition: opacity 0.3s ease; opacity: 1;'>");
+            var li = $("<li class='role-reveal-item role-reveal-skeleton' style='--i: " + i + ";'>");
             var skeleton = $("<div class='skeleton'></div>");
             li.append(skeleton);
             skeletonFragment.appendChild(li[0]);
@@ -52,7 +52,7 @@ window.GameApp.UI.Screens.Distribute = (function () {
         gInfos.forEach(function (info, i) {
             var labelText = info.playerName,
                 inp = $("<a class='button large hollow expanded' data-open='showRoleModal'>" + labelText + "</a>"),
-                li = $("<li class='role-reveal-item' style='--i: " + i + "; transition: opacity 0.3s ease; opacity: 0;'>");
+                li = $("<li class='role-reveal-item' style='--i: " + i + ";'>");
             inp.appendTo(li);
             inp.on('click', function () {
                 // Ensure Modals is available
@@ -70,16 +70,10 @@ window.GameApp.UI.Screens.Distribute = (function () {
 
         // Smooth transition by fading out skeletons first
         var $skeletons = $container.find('.role-reveal-skeleton');
-        $skeletons.css('opacity', '0');
+        $skeletons.addClass('fade-out');
 
         setTimeout(function() {
             $container.empty().append(fragment);
-
-            // Fade in the new items
-            // Small timeout to ensure DOM update before triggering CSS transition
-            setTimeout(function() {
-                 $container.find('.role-reveal-item').css('opacity', '1');
-            }, 50);
 
             // Announce completion
             $container.append("<div aria-live='polite' class='sr-only role-announcer'>Roles assigned</div>");

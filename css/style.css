@@ -163,6 +163,7 @@
   opacity: 0; /* Start hidden */
   animation: slide-up-fade 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; /* refined easing */
   animation-delay: calc(var(--i) * 0.08s); /* slightly faster stagger */
+  transition: opacity 0.3s ease;
 }
 
 @keyframes slide-up-fade {
